@@ -1,0 +1,24 @@
+.countryBox button {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 20px;
+    width: 200px;
+    text-align: left;
+    background-color: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    border-top: 3px solid #6366f1;
+    color: #1a1a2e;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: box-shadow 0.2s ease;
+}
+
+.countryBox button:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-top-color: #1e3a5f;
+}

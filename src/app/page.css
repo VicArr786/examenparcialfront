@@ -1,0 +1,59 @@
+.mainContainer {
+    background-color: #f5f5f0;
+    color: #1a1a2e;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    min-height: 100vh;
+}
+
+.mainContainer h1 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.searchBoxMain {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px;
+}
+
+.searchBoxMain input {
+    background-color: #ffffff;
+    color: #1a1a2e;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+}
+
+.searchBoxMain input:focus {
+    outline: none;
+    border-color: #6366f1;
+}
+
+.searchBoxMain button {
+    background-color: #1e3a5f;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.searchBoxMain button:hover {
+    background-color: #162d4a;
+}
+
+.countriesMainContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 2rem;
+    max-width: 1200px;
+}

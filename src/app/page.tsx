@@ -1,72 +1,128 @@
 'use client'
 
-import { getAllCountries, getCountryNameBySearch } from '@/api-lib/country'
-import { Country } from '@/types'
-import { AxiosError } from 'axios'
-import { useState, useEffect } from 'react'
-
-import CountryCard from './components/countrycard'
-
-import './page.css'
+import {getCocktailsByName, getRandomCocktails} from "@/api-lib/cocktail";
+import { Drink } from "@/types";
+import { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import "./drink.css";
+import {isThenable} from "next/dist/shared/lib/is-thenable";
 
 const Home = () => {
-    const [palabra, setPalabra] = useState<string | null>(null)
-    const [palabraFinal, setPalabraFinal] = useState<string | null>('')
+    // Para el buscador
+    const [name, setName] = useState<string>("");
+    const [finalName, setFinalName] = useState<string>("");
+    const [random,setRandom] = useState<boolean>(false);
 
-    const [pais, setPais] = useState<Country[]>([])
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState<string | null>(null)
+    // Para las rutas
+    const router = useRouter();
 
-    //Para iniciar la pagina con todos los paises cargados
+    const [drinks, setDrinks] = useState<Drink[]>([]);
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
+
+
+
+
     useEffect(() => {
-        getAllCountries()
-            .then((p) => {
-                setPais(p)
-            })
-            .catch((e: AxiosError) => {
-                setError(e.message)
-            })
-    }, [])
+        if (!random) return;
+        setLoading(true);
+        setError(null);
+        getRandomCocktails().then((d) => {
+            setDrinks(d.drinks || []);
+        }).catch((err: AxiosError) => {
+            setError(err.message);
+            setDrinks([]);
+        }).finally(() => {
+            setLoading(false);
+        });
 
-    //Para el buscador
+
+    }, [finalName]);
+
     useEffect(() => {
-        if (!palabraFinal) return
-
-        setLoading(true)
-        setError(null)
-
-        getCountryNameBySearch(palabraFinal)
-            .then((p) => {
-                setPais(p)
+        if (!finalName) return;
+        setLoading(true);
+        setError(null);
+        getCocktailsByName(finalName)
+            .then((d) => {
+                setDrinks(d.drinks || []);
             })
-            .catch((e: AxiosError) => {
-                setError(e.message)
+            .catch((err: AxiosError) => {
+                setError(err.message);
+                setDrinks([]);
             })
             .finally(() => {
-                setLoading(false)
-            })
-    }, [palabraFinal])
+                setLoading(false);
+            });
+
+
+    }, [finalName]);
+
+
+
+
 
     return (
-        <div className="mainContainer">
-            <h1>Buscador de paises</h1>
-            <br />
-            <div className="searchBoxMain">
-                <input onChange={(p) => setPalabra(p.target.value)}></input>
-                <button onClick={() => setPalabraFinal(palabra)}>Buscar</button>
+        <div className="pageContainer">
+            <h1>Buscador de cócteles</h1>
+
+            <div className="searchBox">
+                <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Escribe un cóctel"
+                />
+                <button
+                    onClick={() => {
+                        setFinalName(name);
+                    }}
+                >
+                    Buscar cóctel
+                </button>
             </div>
+            <button
+                onClick={() => {
+                    router.push("/random.php");
+                }}
+            >Dime algo bonito
+            </button>
 
-            {loading && <h1> Loading...</h1>}
-            {error && <h1> Error: {error}</h1>}
+            {loading && <h2>Loading...</h2>}
+            {error && <h2>Error: {error}</h2>}
 
-            <div className="countriesMainContainer">
+            {!loading && !error && finalName && drinks.length === 0 && (
+                <h2>No se encontraron cócteles</h2>
+            )}
+
+            <div className="drinksGrid">
                 {!loading &&
                     !error &&
-                    pais.length > 0 &&
-                    pais.map((p) => <CountryCard key={p.name.common} country={p}></CountryCard>)}
+                    drinks.length > 0 &&
+                    drinks.map((drink) => (
+                        <div className="drinkCard" key={drink.idDrink}>
+                            <button
+                                className="drinkButton"
+                                onClick={() => {
+                                    router.push("/drink/" + drink.idDrink);
+                                }}
+                            >
+                                {drink.strDrinkThumb && (
+                                    <img src={drink.strDrinkThumb} alt={drink.strDrink} />
+                                )}
+
+                                <div className="drinkDataContainer">
+                                    <p><strong>Name:</strong> {drink.strDrink}</p>
+                                    <p><strong>Category:</strong> {drink.strCategory}</p>
+                                    <p><strong>Glass:</strong> {drink.strGlass}</p>
+                                </div>
+                            </button>
+                        </div>
+                    ))}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Home
+export default Home;

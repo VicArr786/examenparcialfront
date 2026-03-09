@@ -38,7 +38,8 @@ const Home = () => {
                 setLoading(false);
             });
 
-        getRandomCocktails().then((d) => {
+
+        if (random) getRandomCocktails().then((d) => {
                 setDrinks(d.drinks || []);
             }).catch((err: AxiosError) => {
                 setError(err.message);
@@ -126,7 +127,7 @@ const Home = () => {
                                 <button
                                     className="drinkButton"
                                     onClick={() => {
-                                        router.push("/random.php");
+                                        router.push("/drink/" + drink.idDrink);
                                     }}
                                 >
                                     {drink.strDrinkThumb && (

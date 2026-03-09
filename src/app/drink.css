@@ -30,14 +30,14 @@
     padding: 10px 16px;
     border: none;
     border-radius: 8px;
-    background-color: #3b82f6;
-    color: white;
+    background-color: #fabada;
+    color: black;
     font-size: 16px;
     cursor: pointer;
 }
 
 .searchBox button:hover {
-    background-color: #2563eb;
+    background-color: #fafbad;
 }
 
 .drinksGrid {
@@ -55,7 +55,7 @@
 .drinkButton {
     width: 100%;
     border: none;
-    background: #eaeaea;
+    background: #fabada;
     border-radius: 14px;
     overflow: hidden;
     cursor: pointer;

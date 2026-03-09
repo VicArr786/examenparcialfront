@@ -26,6 +26,7 @@ const Home = () => {
         if (!finalName) return;
         setLoading(true);
         setError(null);
+
         getCocktailsByName(finalName)
             .then((d) => {
                 setDrinks(d.drinks || []);
@@ -75,12 +76,12 @@ const Home = () => {
 
                     }}
                 >
-                    Buscar cóctel
+                    Buscar cocktail
                 </button>
                 <button
                     className="randomButton"
                     onClick={() => {
-                        setRandom(true);
+                        router.push("/random.php");
                     }}
                 >Dime algo bonito
                 </button>
@@ -118,31 +119,6 @@ const Home = () => {
                             </button>
                         </div>
                     ))}
-                <div className="drinksRandom">
-                    {!loading &&
-                        !error &&
-                        drinks.length > 0 &&
-                        drinks.map((drink) => (
-                            <div className="drinkCard" >
-                                <button
-                                    className="drinkButton"
-                                    onClick={() => {
-                                        router.push("/drink/" + drink.idDrink);
-                                    }}
-                                >
-                                    {drink.strDrinkThumb && (
-                                        <img src={drink.strDrinkThumb} alt={drink.strDrink} />
-                                    )}
-
-                                    <div className="drinkDataContainer">
-                                        <p><strong>Name:</strong> {drink.strDrink}</p>
-                                        <p><strong>Category:</strong> {drink.strCategory}</p>
-                                        <p><strong>Glass:</strong> {drink.strGlass}</p>
-                                    </div>
-                                </button>
-                            </div>
-                        ))}
-                    </div>
             </div>
 
         </div>

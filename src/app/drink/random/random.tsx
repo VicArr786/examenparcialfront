@@ -8,16 +8,25 @@ import { useEffect, useState } from "react";
 import "./drink.css";
 
 const GetRandom = () => {
-    const { id } = useParams();
+    //const { id } = useParams();
     const router = useRouter();
 
     const [cocktail, setCocktail] = useState<Drink | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+
     useEffect(() => {
-        getRandomCocktails().then((d) =>{
-        });
+        getRandomCocktails()
+            .then((res: any) => {
+                setCocktail(res.drinks[0]);
+            })
+            .catch((err: AxiosError) => {
+                setError(err.message);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     });
 
 

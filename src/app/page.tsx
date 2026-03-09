@@ -22,24 +22,6 @@ const Home = () => {
     const [loading, setLoading] = useState<boolean>(false);
 
 
-
-
-    useEffect(() => {
-        if (!random) return;
-        setLoading(true);
-        setError(null);
-        getRandomCocktails().then((d) => {
-            setDrinks(d.drinks || []);
-        }).catch((err: AxiosError) => {
-            setError(err.message);
-            setDrinks([]);
-        }).finally(() => {
-            setLoading(false);
-        });
-
-
-    }, [finalName]);
-
     useEffect(() => {
         if (!finalName) return;
         setLoading(true);
@@ -56,6 +38,15 @@ const Home = () => {
                 setLoading(false);
             });
 
+        getRandomCocktails().then((d) => {
+                setDrinks(d.drinks || []);
+            }).catch((err: AxiosError) => {
+                setError(err.message);
+                setDrinks([]);
+            }).finally(() => {
+                setLoading(false);
+             });
+
 
     }, [finalName]);
 
@@ -67,6 +58,8 @@ const Home = () => {
         <div className="pageContainer">
             <h1>Buscador de cócteles</h1>
 
+
+
             <div className="searchBox">
                 <input
                     type="text"
@@ -76,18 +69,22 @@ const Home = () => {
                 />
                 <button
                     onClick={() => {
+                        setRandom(false);
                         setFinalName(name);
+
                     }}
                 >
                     Buscar cóctel
                 </button>
+                <button
+                    className="randomButton"
+                    onClick={() => {
+                        setRandom(true);
+                    }}
+                >Dime algo bonito
+                </button>
             </div>
-            <button
-                onClick={() => {
-                    router.push("/random.php");
-                }}
-            >Dime algo bonito
-            </button>
+
 
             {loading && <h2>Loading...</h2>}
             {error && <h2>Error: {error}</h2>}
@@ -120,8 +117,35 @@ const Home = () => {
                             </button>
                         </div>
                     ))}
+                <div className="drinksRandom">
+                    {!loading &&
+                        !error &&
+                        drinks.length > 0 &&
+                        drinks.map((drink) => (
+                            <div className="drinkCard" >
+                                <button
+                                    className="drinkButton"
+                                    onClick={() => {
+                                        router.push("/random.php");
+                                    }}
+                                >
+                                    {drink.strDrinkThumb && (
+                                        <img src={drink.strDrinkThumb} alt={drink.strDrink} />
+                                    )}
+
+                                    <div className="drinkDataContainer">
+                                        <p><strong>Name:</strong> {drink.strDrink}</p>
+                                        <p><strong>Category:</strong> {drink.strCategory}</p>
+                                        <p><strong>Glass:</strong> {drink.strGlass}</p>
+                                    </div>
+                                </button>
+                            </div>
+                        ))}
+                    </div>
             </div>
+
         </div>
+
     );
 };
 
